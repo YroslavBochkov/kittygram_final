@@ -12,11 +12,15 @@ services:
   backend:
     image: yaroslavbochkov/kittygram_backend
     env_file: .env
+    depends_on:
+      - db
     volumes:
       - static:/backend_static
       - media:/app/media
   frontend:
     env_file: .env
+    depends_on:
+      - backend 
     image: yaroslavbochkov/kittygram_frontend
     command: cp -r /app/build/. /static/
     volumes:
@@ -24,6 +28,9 @@ services:
   gateway:
     image: yaroslavbochkov/kittygram_gateway
     env_file: .env
+    depends_on:
+      - frontend
+      - backend
     ports:
       - 9000:80
     volumes:
